@@ -1,0 +1,41 @@
+{
+  "name": "gametober",
+  "version": "0.0.0",
+  "description": "Gametober project.",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "webpack-dev-server --mode=development --content-base=src --hot --inline --port=3000 --host=127.0.0.1 --history-api-fallback --open --overlay",
+    "build": "webpack -p --mode=production --display-error-details",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vikingandrobot/gametober.git"
+  },
+  "author": "Mathieu Monteverde",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vikingandrobot/gametober/issues"
+  },
+  "homepage": "https://github.com/vikingandrobot/gametober#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.11.6",
+    "@babel/core": "^7.11.6",
+    "@babel/preset-env": "^7.11.5",
+    "babel-eslint": "^10.1.0",
+    "babel-loader": "^8.1.0",
+    "css-hot-loader": "^1.4.4",
+    "css-loader": "^4.3.0",
+    "eslint": "^7.10.0",
+    "eslint-loader": "^4.0.2",
+    "html-webpack-plugin": "^4.5.0",
+    "mini-css-extract-plugin": "^0.11.2",
+    "sass": "^1.26.11",
+    "sass-loader": "^10.0.2",
+    "style-loader": "^1.2.1",
+    "uglifyjs-webpack-plugin": "^2.2.0",
+    "webpack": "^4.44.2",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
+  }
+}
