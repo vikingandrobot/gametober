@@ -40,7 +40,7 @@ const productionConfig = {
       template: HTML_TEMPLATE_PATH,
       filename: 'index.html',
       inject: 'body',
-      title: `Gametober version ${VERSION}`,
+      title: `Gametober Day ${VERSION}`,
       minify: {
         collapseWhiteSpace: true,
         removeComments: true,
