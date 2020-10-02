@@ -1,8 +1,7 @@
-/* Entry point */
+import { setup, start } from './Game/Game';
+
 import './index.scss';
 
-function add(a = 1, b = 2) {
-  return a + b;
-}
+setup();
 
-console.log(add(1, 2));
+start();
