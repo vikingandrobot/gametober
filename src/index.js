@@ -1,7 +1,10 @@
 import { setup, start } from './Game/Game';
+import { waitForImagesToBeLoaded } from './Game/ImageLoader';
 
 import './index.scss';
 
-setup();
+waitForImagesToBeLoaded().then(() => {
+  setup();
 
-start();
+  start();
+});
