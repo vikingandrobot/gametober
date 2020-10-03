@@ -6,14 +6,14 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const htmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-const VERSION = '02';
+const VERSION = '03';
 const PUBLIC_PATH = `/gametober/day/${VERSION}/`;
 const BUILD_FOLDER_PATH = path.resolve(__dirname, 'dist/');
 const HTML_TEMPLATE_PATH = 'public/index.html';
 
 const productionConfig = {
   mode: 'production',
-  entry: './src/index.js',
+  entry: ['./polyfill.js', './src/index.js'],
   output: {
     path: BUILD_FOLDER_PATH,
     publicPath: PUBLIC_PATH,
@@ -61,7 +61,7 @@ const productionConfig = {
       },
       {
         test: /\.(js|jsx)$/,
-        exclude: /(node_modules|bower_components)/,
+        exclude: /node_modules\/(?!@thi.ng)/,
         loader: 'babel-loader'
       },
       {
@@ -70,7 +70,7 @@ const productionConfig = {
       },
       {
         test: /\.(png|jpg|gif|svg)$/,
-        loader: `file-loader?name=[name].[ext]?[hash]`
+        loader: `file-loader?name=static/img/[name].[ext]?[hash]`
       }
     ]
   },
