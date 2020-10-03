@@ -7,9 +7,9 @@ const GroundBaseImage = loadImage(GroundBaseUrl);
 const GroundDetailsImage = loadImage(GroundDetailsUrl);
 
 class Ground {
-  constructor(pos, size) {
-    this.pos = pos || { x: 0, y: 0 };
-    this.size = size || { width: 100, height: 100 };
+  constructor(pos = [0, 0], size = { width: 100, height: 100 }) {
+    this.pos = pos;
+    this.size = size;
   }
 
   logic() {
@@ -17,13 +17,13 @@ class Ground {
   }
 
   draw(env) {
-    const { ctx } = env;
+    const { camera: { ctx } } = env;
     const { pos, size } = this;
     const imageWidth = GroundBaseImage.width;
     let drawingPos = 0;
     while (drawingPos < size.width) {
-      const xPos = pos.x + drawingPos;
-      const yPos = ctx.canvas.height - pos.y - size.height - 10;
+      const xPos = pos[0] + drawingPos;
+      const yPos = ctx.canvas.height - pos[1] - size.height - 10;
       ctx.beginPath();
       ctx.drawImage(
         GroundBaseImage,
