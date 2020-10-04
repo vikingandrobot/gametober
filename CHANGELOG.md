@@ -1,3 +1,9 @@
+Day 04
+- Removed Ground implementation
+- Added Basis for Tile Maps
+- Added some dummy collision control with the tile map system (temporary)
+- Added first sprite for tile map
+
 Day 03
 - Refactored control key listeners
 - Refactored vectors using @thi.ng/vectors library

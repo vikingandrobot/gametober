@@ -1,5 +1,5 @@
 const MIN_POS_X = 0;
-const MIN_POS_Y = 3000;
+const MAX_POS_X = 3000;
 
 class Camera {
   constructor(canvasId) {
@@ -16,11 +16,15 @@ class Camera {
     this.canvas.height = vh;
   }
 
+  getViewport() {
+    return { width: this.canvas.width, height: this.canvas.height };
+  }
+
   center(newPos) {
     const { ctx, canvas } = this;
     ctx.save();
     // Center the position in the middle of the canvas, except if it would mean showing outside the limits of the World
-    const xTranslation = Math.min(Math.max(-MIN_POS_Y + canvas.width, -newPos[0] + canvas.width/2), MIN_POS_X);
+    const xTranslation = Math.min(Math.max(-MAX_POS_X + canvas.width, -newPos[0] + canvas.width/2), MIN_POS_X);
     // The below commented line will be useful once we start following the character vertically as well
     // ctx.translate(xTranslation, newPos[1] - 100);
     ctx.translate(xTranslation, 0);

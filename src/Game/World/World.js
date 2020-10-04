@@ -1,6 +1,6 @@
 import * as v from '@thi.ng/vectors';
 
-const G = 0.05;
+const G = 0.055;
 export const everything = [];
 
 /*

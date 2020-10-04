@@ -3,15 +3,12 @@ import debounce from 'lodash.debounce';
 import registerKeyListeners from './registerKeyListeners';
 
 import Camera from './Camera/Camera';
-import { everything, spawn, gravity } from './World/World';
+import { gravity } from './World/World';
 import Player from './Player/Player';
-import Ground from './World/Ground';
+import Map from './World/Map';
 
 
 const player = new Player([100, 300]);
-
-const ground = new Ground([0, -57], { width: 3000, height: 157 });
-spawn(ground);
 
 const camera = new Camera('gt-canvas');
 
@@ -25,7 +22,8 @@ const env = {
   time : {
     prevTimestamp: null,
     deltaT: null,
-  }
+  },
+  map: new Map(),
 };
 
 function resizeGame() {
@@ -42,12 +40,11 @@ function core(timestamp) {
     time.deltaT = 0;
   }
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-  everything.forEach(el => el.logic());
   gravity(player, env);
   player.logic(env);
   camera.center(player.pos);
   player.draw(env);
-  everything.forEach(el => el.draw(env));
+  env.map.draw(env);
   camera.reset();
   env.animationId = requestAnimationFrame(core);
 }
