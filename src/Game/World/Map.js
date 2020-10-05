@@ -20,9 +20,16 @@ class Map {
 
   tileSize = TileMap.TILE_SIZE;
 
-   getWidth () {
-     return MAP_WIDTH_IN_TILES * TileMap.TILE_SIZE;
-   }
+  getWidth () {
+   return MAP_WIDTH_IN_TILES * TileMap.TILE_SIZE;
+  }
+
+  isInWall(pos) {
+    const x = pos[0];
+    const y = pos[1];
+
+    return this.tileMap.tiles[parseInt(y / this.tileSize)][parseInt(x / this.tileSize)] !== null;
+  }
 
   draw(env) {
     const { camera } = env;

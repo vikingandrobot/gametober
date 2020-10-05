@@ -1,3 +1,8 @@
+Day 05
+- Removed jenky ground management in player motion
+- Added collision detection in the world. Algorithm is still buggy and can make the game crash.
+- Added finer and smoother controls to the Player.
+
 Day 04
 - Removed Ground implementation
 - Added Basis for Tile Maps
