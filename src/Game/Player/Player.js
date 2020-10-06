@@ -1,6 +1,6 @@
 import * as v from '@thi.ng/vectors';
 
-import { move } from '../World/World';
+import { move, getBounds } from '../World/World';
 import { loadImage } from '../ImageLoader';
 import MotionStatus from './MotionStatus';
 
@@ -9,15 +9,6 @@ import PlayerUrlLeft from '../../../assets/character_Left.png';
 
 const PlayerImageRight = loadImage(PlayerUrlRight);
 const PlayerImageLeft = loadImage(PlayerUrlLeft);
-
-function getBounds(pos, size) {
-  return [
-    v.add2([], pos, [-(size.width/2.8 ), + (size.height * 0.9)]),
-    v.add2([], pos, [size.width/2.8, + (size.height * 0.9)]),
-    v.add2([], pos, [size.width/2.8, 0]),
-    v.add2([], pos, [-(size.width/2.8), 0]),
-  ];
-}
 
 class Player {
 
@@ -70,7 +61,11 @@ class Player {
       }
     }
 
-    this.pos = move(this.pos, this.speed, this.size, getBounds, env);
+    const {
+      pos, newSpeed,
+    } = move(this.pos, this.speed, this.size, getBounds, env);
+    this.pos = pos;
+    this.speed = newSpeed;
 
     if (this.prevSpeed && this.prevSpeed[1] === this.speed[1]) {
       this.canJump = true;

@@ -31,6 +31,22 @@ class Map {
     return this.tileMap.tiles[parseInt(y / this.tileSize)][parseInt(x / this.tileSize)] !== null;
   }
 
+  getTileBounds(pos) {
+    const x = pos[0];
+    const y = pos[1];
+    const bottomLeft = [
+      parseInt(x / this.tileSize) * this.tileSize,
+      parseInt(y / this.tileSize) * this.tileSize,
+    ];
+
+    return [
+      [bottomLeft[0], bottomLeft[1] + this.tileSize],
+      [bottomLeft[0] + this.tileSize, bottomLeft[1] + this.tileSize],
+      [bottomLeft[0] + this.tileSize, bottomLeft[1]],
+      bottomLeft,
+    ];
+  }
+
   draw(env) {
     const { camera } = env;
     const viewport = camera.getViewport();

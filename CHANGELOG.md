@@ -1,3 +1,6 @@
+Day 06
+- Working on collisions.
+
 Day 05
 - Removed jenky ground management in player motion
 - Added collision detection in the world. Algorithm is still buggy and can make the game crash.
