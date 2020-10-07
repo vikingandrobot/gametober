@@ -29,6 +29,7 @@ class Player {
   motionStatus = MotionStatus.STOP;
 
   maxSpeed = 10;
+  maxVerticalSpeed = 20;
 
   getBounds() {
     return getBounds(this.pos, this.size);
@@ -61,11 +62,25 @@ class Player {
       }
     }
 
-    const {
-      pos, newSpeed,
-    } = move(this.pos, this.speed, this.size, getBounds, env);
-    this.pos = pos;
-    this.speed = newSpeed;
+    if (this.speed[0] < 0) {
+      this.speed[0] = Math.max(this.speed[0], -this.maxSpeed);
+    } else {
+      this.speed[0] = Math.min(this.speed[0], this.maxSpeed);
+    }
+    if (this.speed[1] < 0) {
+      this.speed[1] = Math.max(this.speed[1], -this.maxVerticalSpeed);
+    } else {
+      this.speed[1] = Math.min(this.speed[1], this.maxVerticalSpeed);
+    }
+
+    const newPos = move(this.pos, this.speed, this.size, getBounds, env);
+    if (this.pos[0] === newPos[0]) {
+      this.speed[0] = 0;
+    }
+    if (this.pos[1] === newPos[1]) {
+      this.speed[1] = 0;
+    }
+    this.pos = newPos;
 
     if (this.prevSpeed && this.prevSpeed[1] === this.speed[1]) {
       this.canJump = true;
@@ -90,6 +105,7 @@ class Player {
     ctx.lineTo(bounds[3][0], ctx.canvas.height - bounds[3][1]);
     ctx.closePath();
     ctx.stroke();
+
     ctx.beginPath();
     ctx.drawImage(
       this.direction > 0 ? PlayerImageRight : PlayerImageLeft,

@@ -8,7 +8,7 @@ import Player from './Player/Player';
 import Map from './World/Map';
 
 
-const player = new Player([100, 300]);
+const player = new Player([200, 400]);
 
 const camera = new Camera('gt-canvas');
 
@@ -43,8 +43,8 @@ function core(timestamp) {
   gravity(player, env);
   player.logic(env);
   camera.center(player.pos);
-  player.draw(env);
   env.map.draw(env);
+  player.draw(env);
   camera.reset();
   env.animationId = requestAnimationFrame(core);
 }
