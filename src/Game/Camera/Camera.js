@@ -1,5 +1,8 @@
+import TileMap from '../World/TileMap';
+import { MAP_WIDTH_IN_TILES } from '../World/Map';
+
 const MIN_POS_X = 0;
-const MAX_POS_X = 3000;
+const MAX_POS_X = TileMap.TILE_SIZE * MAP_WIDTH_IN_TILES;
 
 class Camera {
   constructor(canvasId) {
@@ -26,8 +29,8 @@ class Camera {
     // Center the position in the middle of the canvas, except if it would mean showing outside the limits of the World
     const xTranslation = Math.min(Math.max(-MAX_POS_X + canvas.width, -newPos[0] + canvas.width/2), MIN_POS_X);
     // The below commented line will be useful once we start following the character vertically as well
-    // ctx.translate(xTranslation, newPos[1] - 150);
-    ctx.translate(xTranslation, 0);
+    ctx.translate(xTranslation, newPos[1] - 150);
+    //ctx.translate(xTranslation, 0);
     this.pos = newPos;
   }
 

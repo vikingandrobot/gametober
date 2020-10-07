@@ -1,6 +1,6 @@
 import { loadImage } from '../ImageLoader';
 
-const TILE_SIZE = 60;
+const TILE_SIZE = 70;
 const TILE_SIZE_INSIDE_OF_IMAGE = 40;
 
 class TileMap {
@@ -39,6 +39,12 @@ class TileMap {
       TILE_SIZE,
       TILE_SIZE,
     );
+    ctx.strokeStyle = "red";
+    ctx.rect(posX,
+    posY,
+    TILE_SIZE,
+    TILE_SIZE);
+    ctx.stroke();
     ctx.closePath();
   }
 }

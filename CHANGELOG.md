@@ -1,3 +1,7 @@
+Day 07
+- Implementing collisions with tile map.
+- Small bug when going left into a 2+ tile wall.
+
 Day 06
 - Working on collisions.
 

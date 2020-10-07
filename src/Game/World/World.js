@@ -20,71 +20,99 @@ export function getBounds(pos, size) {
   ];
 }
 
+/*
+ * Return the bounds of the cross rectangle (overlapping rectangle) between
+ * 2 bounds describing 2 rectangles.
+ */
+export function getCrossRectangleBounds(bounds1, bounds2) {
+  const x1 = Math.max(bounds1[0][0], bounds2[0][0]);
+  const x2 = Math.min(bounds1[1][0], bounds2[1][0]);
+  const y1 = Math.max(bounds1[3][1], bounds2[3][1]);
+  const y2 = Math.min(bounds1[0][1], bounds2[0][1]);
+  return [
+    [x1, y2],
+    [x2, y2],
+    [x2, y1],
+    [x1, y1],
+  ];
+}
+
 export function gravity(element, env) {
   const { time } = env;
   element.speed = v.add2([], element.speed, [0, -G * time.deltaT]);
 }
 
-function getCollidingPoints(bounds, map) {
-  const bottomLeft = bounds[3];
-  const bottomRight = bounds[2];
-  return [bottomLeft, bottomRight].filter(b => map.isInWall(b));
-  // const middleLeft = [bounds[0][0], (bounds[0][1] + bounds[3][1]) / 2];
-  // const middleRight = [bounds[1][0], (bounds[1][1] + bounds[2][1]) / 2];
-}
+/*
+ * Algorithm to move a cross rectangle outside of a tile.
+ * tile: Bounds of a tile
+ * cr: Bounds of the cross rectangle to move
+ */
+function computeVectorToMoveObjectOutOfTile(tile, cr) {
+  const crWidth = cr[1][0] - cr[0][0];
+  const crHeight = cr[0][1] - cr[3][1];
 
-function getXYToCheck(speed, tileBounds) {
-  const xSpeed = speed[0];
-  const ySpeed = speed[1];
-  let x;
-  let y;
-  if (xSpeed >= 0) {
-    x = tileBounds[0][0];
+  let vx = 0;
+  let vy = 0;
+
+  if (crWidth < crHeight) {
+    const distanceLeft = cr[1][0] - tile[0][0];
+    const distanceRight = tile[1][0] - cr[0][0];
+    if (distanceLeft < distanceRight) {
+      vx = -distanceLeft - 1;
+    } else {
+      vx = distanceRight;
+    }
   } else {
-    x = tileBounds[1][0];
+    const distanceBottom = cr[0][1] - tile[3][1];
+    const distanceTop = tile[0][1] - cr[3][1];
+    if (distanceBottom < distanceTop) {
+      vy = -distanceBottom - 1;
+    } else {
+      vy = distanceTop;
+    }
   }
-  if (ySpeed >= 0) {
-    y = tileBounds[3][1];
-  } else {
-    y = tileBounds[0][1];
-  }
-  return { x, y };
+  return [vx, vy];
 }
 
-// Return a vector fixing the point position
-function fixTrajectory(point, motionVector, map) {
-  const invertedVector = [-motionVector[0], -motionVector[1]];
-  const { y } = getXYToCheck(motionVector, map.getTileBounds(point));
-  const yPos = y; // map.getTileBounds(point)[0][1];
-  if (invertedVector[1] === 0) {
-    return [0, 0];
-  }
-  const xPos = point[0] + invertedVector[0] * ((yPos - point[1]) / invertedVector[1]);
-  return [xPos - point[0], yPos - point[1]]
-}
-
+/*
+ * Move an element inside the map.
+ * pos: Position vector of the element ot move
+ * motionVector: The vector describing the movement, for example, the speed
+ * size: the size of the element (width, height)
+ * getBoundsFromPos: A function that returns the bounds of the element from the pos
+ * env: current environment of the game
+ */
 export function move(pos, motionVector, size, getBoundsFromPos, env) {
   const { map } = env;
 
-  let newPos = v.add([], pos, motionVector);
-  let newSpeed = motionVector;
+  let newPos = v.add2([], pos, motionVector);
 
   let bounds = getBoundsFromPos(newPos, size);
+  const collisionTiles = map.getCollidingTilesBoundsFromBounds(bounds);
+  const sortedTiles = collisionTiles
+    .map((t) => {
+      const c = getCrossRectangleBounds(bounds, t);
+      const area = (c[1][0] - c[0][0]) * (c[0][1]-c[3][1]);
+      return {
+        tile: t,
+        collisionRectangle: c,
+        area,
+      };
+    })
+    .sort((t1, t2) => t2.area - t1.area);
 
-  const collidingPoints = getCollidingPoints(bounds, map);
-  if (collidingPoints.length) {
-    const correctingVector = fixTrajectory(collidingPoints[0], motionVector, map);
-    newPos = v.add([], newPos, correctingVector);
-    if (correctingVector[0]) {
-      newPos = v.add([], newPos, [-correctingVector[0], 0]);
-    }
-    if (correctingVector[1] !== 0) {
-      newSpeed[1] = 0;
+  for (let i = 0; i < sortedTiles.length; ++i) {
+    const { tile, collisionRectangle } = sortedTiles[i];
+    const correctionVector = computeVectorToMoveObjectOutOfTile(tile, collisionRectangle);
+    newPos = v.add2([], newPos, correctionVector);
+
+    bounds = getBoundsFromPos(newPos, size);
+    const collisionTiles = map.getCollidingTilesBoundsFromBounds(bounds);
+
+    if (collisionTiles.length === 0) {
+      break;
     }
   }
 
-  return {
-    pos: newPos,
-    newSpeed,
-  };
+  return newPos;
 }
