@@ -82,7 +82,7 @@ class Player {
     }
     this.pos = newPos;
 
-    if (this.prevSpeed && this.prevSpeed[1] === this.speed[1]) {
+    if (this.prevSpeed && this.prevSpeed[1] === this.speed[1] && this.speed[1] === 0) {
       this.canJump = true;
       this.inTheAir = false;
     } else if (this.prevSpeed){

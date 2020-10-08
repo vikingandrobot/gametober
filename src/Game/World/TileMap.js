@@ -39,12 +39,6 @@ class TileMap {
       TILE_SIZE,
       TILE_SIZE,
     );
-    ctx.strokeStyle = "red";
-    ctx.rect(posX,
-    posY,
-    TILE_SIZE,
-    TILE_SIZE);
-    ctx.stroke();
     ctx.closePath();
   }
 }
