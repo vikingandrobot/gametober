@@ -2,16 +2,26 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width-device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title><%= htmlWebpackPlugin.options.title %></title>
   </head>
   <body>
     <noscript>
       You need to enable Javascript to run this Gametober application.
     </noscript>
-    <div id="root">
+    <div id="gt-root" class="gt-screen">
       <canvas id="gt-canvas" width="0" height="0"></canvas>
       <div id="gt-instructions"><p>Use arrow keys to move the character from left to right. Use up arrow key to jump.</p></div>
+    </div>
+    <div id="gt-mobile-controls">
+      <div id="gt-mobile-controls-joystick"></div>
+      <div id="gt-mobile-controls-button-a"></div>
+    </div>
+    <div id="gt-device-choice-screen" class="gt-screen with-padding">
+      <div class="gt-menu">
+        <a id="gt-device-choice-screen-desktop" class="gt-menu-button">Play Desktop version</a>
+        <a id="gt-device-choice-screen-mobile" class="gt-menu-button">Play Mobile version</a>
+      </div>
     </div>
   </body>
 </html>

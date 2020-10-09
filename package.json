@@ -43,6 +43,7 @@
   },
   "dependencies": {
     "@thi.ng/vectors": "^4.6.6",
-    "lodash.debounce": "^4.0.8"
+    "lodash.debounce": "^4.0.8",
+    "nipplejs": "^0.8.7"
   }
 }

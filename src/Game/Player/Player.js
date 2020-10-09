@@ -28,7 +28,7 @@ class Player {
 
   motionStatus = MotionStatus.STOP;
 
-  maxSpeed = 10;
+  maxSpeed = 7;
   maxVerticalSpeed = 20;
 
   getBounds() {
@@ -50,7 +50,7 @@ class Player {
       this.direction = 1;
     }
     if (up && this.canJump) {
-      this.speed = [this.speed[0], Math.abs(this.speed[0])/2 + 15];
+      this.speed = [this.speed[0], Math.abs(this.speed[0])/1.5 + 15];
       this.canJump = false;
     }
     if (!left && ! right) {

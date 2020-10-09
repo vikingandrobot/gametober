@@ -11,7 +11,8 @@ const mapOptions = {
   rows: MAP_HEIGHT_IN_TILES,
   spriteUrl: mapImageUrl,
   spriteWidthInTiles: 2,
-  tiles: tiles,
+  tiles: tiles.map(row => row.map(val => val -1)),
+  logicalMap: tiles.map(row => row.map((val) => { return val === 0 ? 0 : 1 })),
 };
 
 class Map {
@@ -73,7 +74,7 @@ class Map {
       }
     }
     return allTiles
-      .filter(t => this.tileMap.tiles[t.row][t.col] !== null);
+      .filter(t => this.tileMap.logicalMap[t.row][t.col] === 1);
   }
 
   /*
@@ -87,9 +88,14 @@ class Map {
   draw(env) {
     const { camera } = env;
     const viewport = camera.getViewport();
-    for (let row = 0; row < MAP_HEIGHT_IN_TILES; ++row) {
+    const cameraBounds = camera.getVisibleBounds();
+    const indexOrigin = this.getTileIndexesFromPos(cameraBounds[3]);
+    const indexEnd = this.getTileIndexesFromPos(cameraBounds[1]);
+    const endRow = Math.min(MAP_HEIGHT_IN_TILES, indexEnd.row + 1);
+    const endCol = Math.min(MAP_WIDTH_IN_TILES, indexEnd.col + 1);
+    for (let row = indexOrigin.row; row < endRow; ++row) {
       const rowYPos = viewport.height - TileMap.TILE_SIZE - (row * TileMap.TILE_SIZE);
-      for (let col = 0; col < MAP_WIDTH_IN_TILES; ++col) {
+      for (let col = indexOrigin.col; col < endCol; ++col) {
         const colXPos = col * TileMap.TILE_SIZE;
         this.tileMap.drawTile(camera.ctx, colXPos, rowYPos, row, col);
       }

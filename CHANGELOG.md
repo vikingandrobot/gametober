@@ -1,3 +1,12 @@
+Day 09
+- Optimize Map rendering
+- Optimize rendering
+- Follow player up to the edge of the map
+- Added mobile game support
+
+Day 08
+- Added Parallax
+
 Day 07
 - Implementing collisions with tile map.
 - Small bug when going left into a 2+ tile wall.
