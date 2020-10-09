@@ -6,13 +6,14 @@ const TILE_SIZE_INSIDE_OF_IMAGE = 40;
 class TileMap {
   constructor(settings) {
     const {
-      spriteUrl, spriteWidthInTiles, cols, rows, tiles,
+      spriteUrl, spriteWidthInTiles, cols, rows, tiles, logicalMap,
     } = settings;
     this.sprite = loadImage(spriteUrl);
     this.spriteWidthInTiles = spriteWidthInTiles;
     this.cols = cols;
     this.rows = rows;
     this.tiles = tiles;
+    this.logicalMap = logicalMap;
   }
 
   getTileValue(row, col) {
@@ -22,7 +23,7 @@ class TileMap {
   drawTile(ctx, posX, posY, row, col) {
     // The tile value which is also the index in the sprite
     const tileValue = this.getTileValue(row, col);
-    if (tileValue == null) {
+    if (tileValue === -1) {
       return;
     }
     const spriteColIndex = tileValue % this.spriteWidthInTiles;

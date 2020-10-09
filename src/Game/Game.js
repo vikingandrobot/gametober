@@ -1,7 +1,5 @@
 import debounce from 'lodash.debounce';
 
-import registerKeyListeners from './registerKeyListeners';
-
 import Camera from './Camera/Camera';
 import { gravity } from './World/World';
 import Decor from './World/Decor';
@@ -98,7 +96,7 @@ const mountains = new Decor(
   mountainsUrl,
 );
 
-const env = {
+export const env = {
   camera,
   intervalId: null,
   controls: {
@@ -150,7 +148,6 @@ function core(timestamp) {
 // Set up the game environment before running it
 export function setup() {
   resizeGame();
-  registerKeyListeners(env);
 
   window.addEventListener('resize', debounce(() => {
     resizeGame();

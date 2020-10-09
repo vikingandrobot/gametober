@@ -1,8 +1,10 @@
 import TileMap from '../World/TileMap';
-import { MAP_WIDTH_IN_TILES } from '../World/Map';
+import { MAP_WIDTH_IN_TILES, MAP_HEIGHT_IN_TILES } from '../World/Map';
 
 const MIN_POS_X = 0;
 const MAX_POS_X = TileMap.TILE_SIZE * MAP_WIDTH_IN_TILES;
+const MIN_POS_Y = 0;
+const MAX_POS_Y = TileMap.TILE_SIZE * MAP_HEIGHT_IN_TILES;
 
 const Z_REFERENCE_DISTANCE = 200;
 
@@ -25,6 +27,30 @@ class Camera {
     return { width: this.canvas.width, height: this.canvas.height };
   }
 
+  getVisibleBounds() {
+    const x0 = this.pos[0] - this.canvas.width / 2;
+    const x1 = this.pos[0] + this.canvas.width / 2;
+    const y1 = this.pos[1] + this.canvas.height;
+    const y0 = this.pos[1];
+
+    return [
+      [x0, y1],
+      [x1, y1],
+      [x1, y0],
+      [x0, y0],
+    ];
+  }
+
+  isElementVisible(bounds) {
+    const x0 = bounds[0][0];
+    const x1 = bounds[1][0];
+    const y0 = bounds[3][1];
+    const y1 = bounds[0][1];
+    const cb = this.getVisibleBounds();
+
+    return (x0 <= cb[1][0] && x1 >= cb[0][0] && y0 <= cb[0][1] && y1 >= cb[3][1]);
+  }
+
   getDepthRatio(zPos) {
     return Z_REFERENCE_DISTANCE / zPos;
   }
@@ -39,12 +65,14 @@ class Camera {
   center(newPos) {
     const { ctx, canvas } = this;
     ctx.save();
-    // Center the position in the middle of the canvas, except if it would mean showing outside the limits of the World
-    const xTranslation = Math.min(Math.max(-MAX_POS_X + canvas.width, -newPos[0] + canvas.width/2), MIN_POS_X);
+    const mapNewPos = [
+      Math.max(Math.min(MAX_POS_X - canvas.width/2 - TileMap.TILE_SIZE, newPos[0]), MIN_POS_X + canvas.width/2 + TileMap.TILE_SIZE),
+      Math.max(Math.min(MAX_POS_Y - canvas.height - TileMap.TILE_SIZE, newPos[1] - 100), MIN_POS_Y + TileMap.TILE_SIZE),
+    ]
     // The below commented line will be useful once we start following the character vertically as well
-    ctx.translate(xTranslation, newPos[1] - 100);
+    ctx.translate(-mapNewPos[0] + canvas.width/2, mapNewPos[1]);
     //ctx.translate(xTranslation, 0);
-    this.pos = newPos;
+    this.pos = mapNewPos;
   }
 
   reset() {
