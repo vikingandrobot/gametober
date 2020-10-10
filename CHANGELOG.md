@@ -1,3 +1,6 @@
+Day 10
+- Fixed collisions.
+
 Day 09
 - Optimize Map rendering
 - Optimize rendering

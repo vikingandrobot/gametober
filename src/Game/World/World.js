@@ -13,10 +13,10 @@ export function spawn(element) {
 
 export function getBounds(pos, size) {
   return [
-    v.add2([], pos, [-(size.width/2.8 ), + (size.height * 0.9)]),
-    v.add2([], pos, [size.width/2.8, + (size.height * 0.9)]),
-    v.add2([], pos, [size.width/2.8, 0]),
-    v.add2([], pos, [-(size.width/2.8), 0]),
+    v.add2([], pos, [-(size.width/2 ), + (size.height)]),
+    v.add2([], pos, [size.width/2, + (size.height)]),
+    v.add2([], pos, [size.width/2, 0]),
+    v.add2([], pos, [-(size.width/2), 0]),
   ];
 }
 
@@ -88,8 +88,8 @@ export function move(pos, motionVector, size, getBoundsFromPos, env) {
   let newPos = v.add2([], pos, motionVector);
 
   let bounds = getBoundsFromPos(newPos, size);
-  const collisionTiles = map.getCollidingTilesBoundsFromBounds(bounds);
-  const sortedTiles = collisionTiles
+  let collisionTiles = map.getCollidingTilesBoundsFromBounds(bounds);
+  let sortedTiles = collisionTiles
     .map((t) => {
       const c = getCrossRectangleBounds(bounds, t);
       const area = (c[1][0] - c[0][0]) * (c[0][1]-c[3][1]);
@@ -107,10 +107,19 @@ export function move(pos, motionVector, size, getBoundsFromPos, env) {
     newPos = v.add2([], newPos, correctionVector);
 
     bounds = getBoundsFromPos(newPos, size);
-    const collisionTiles = map.getCollidingTilesBoundsFromBounds(bounds);
+    collisionTiles = map.getCollidingTilesBoundsFromBounds(bounds);
 
     if (collisionTiles.length === 0) {
       break;
+    } else {
+      // Filter out tiles that are already 
+      sortedTiles = sortedTiles.filter(t1 => collisionTiles.find(t2 => (
+        t1.tile[0][0] === t2[0][0] && t1.tile[0][1] === t2[0][1] &&
+        t1.tile[1][0] === t2[1][0] && t1.tile[1][1] === t2[1][1] &&
+        t1.tile[2][0] === t2[2][0] && t1.tile[2][1] === t2[2][1] &&
+        t1.tile[3][0] === t2[3][0] && t1.tile[3][1] === t2[3][1]
+      )));
+      i = -1;
     }
   }
 
