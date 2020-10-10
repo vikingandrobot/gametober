@@ -19,6 +19,7 @@ class Player {
   }
 
   size = { width: 65, height: 110 };
+  hitboxSize = { width: 45, height: 77 };
 
   canJump = true;
 
@@ -32,7 +33,7 @@ class Player {
   maxVerticalSpeed = 20;
 
   getBounds() {
-    return getBounds(this.pos, this.size);
+    return getBounds(this.pos, this.hitboxSize);
   }
 
   logic(env) {
@@ -73,7 +74,7 @@ class Player {
       this.speed[1] = Math.min(this.speed[1], this.maxVerticalSpeed);
     }
 
-    const newPos = move(this.pos, this.speed, this.size, getBounds, env);
+    const newPos = move(this.pos, this.speed, this.hitboxSize, getBounds, env);
     if (this.pos[0] === newPos[0]) {
       this.speed[0] = 0;
     }

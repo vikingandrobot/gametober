@@ -1,10 +1,10 @@
 import TileMap from '../World/TileMap';
 import { MAP_WIDTH_IN_TILES, MAP_HEIGHT_IN_TILES } from '../World/Map';
 
-const MIN_POS_X = 0;
-const MAX_POS_X = TileMap.TILE_SIZE * MAP_WIDTH_IN_TILES;
-const MIN_POS_Y = 0;
-const MAX_POS_Y = TileMap.TILE_SIZE * MAP_HEIGHT_IN_TILES;
+const MIN_POS_X = TileMap.TILE_SIZE;
+const MAX_POS_X = TileMap.TILE_SIZE * MAP_WIDTH_IN_TILES - TileMap.TILE_SIZE;
+const MIN_POS_Y = TileMap.TILE_SIZE;
+const MAX_POS_Y = TileMap.TILE_SIZE * MAP_HEIGHT_IN_TILES - TileMap.TILE_SIZE;
 
 const Z_REFERENCE_DISTANCE = 200;
 
@@ -66,8 +66,8 @@ class Camera {
     const { ctx, canvas } = this;
     ctx.save();
     const mapNewPos = [
-      Math.max(Math.min(MAX_POS_X - canvas.width/2 - TileMap.TILE_SIZE, newPos[0]), MIN_POS_X + canvas.width/2 + TileMap.TILE_SIZE),
-      Math.max(Math.min(MAX_POS_Y - canvas.height - TileMap.TILE_SIZE, newPos[1] - 100), MIN_POS_Y + TileMap.TILE_SIZE),
+      Math.max(Math.min(MAX_POS_X - canvas.width/2, newPos[0]), MIN_POS_X + canvas.width/2  ),
+      Math.max(Math.min(MAX_POS_Y - canvas.height, newPos[1] - 100), MIN_POS_Y),
     ]
     // The below commented line will be useful once we start following the character vertically as well
     ctx.translate(-mapNewPos[0] + canvas.width/2, mapNewPos[1]);

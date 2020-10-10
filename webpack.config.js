@@ -6,7 +6,7 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const htmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-const VERSION = '09';
+const VERSION = '10';
 const PUBLIC_PATH = `/gametober/day/${VERSION}/`;
 const BUILD_FOLDER_PATH = path.resolve(__dirname, 'dist/');
 const HTML_TEMPLATE_PATH = 'public/index.html';
