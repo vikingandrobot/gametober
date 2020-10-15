@@ -1,14 +1,11 @@
 import * as v from '@thi.ng/vectors';
 
 import { move, getBounds } from '../World/World';
-import { loadImage } from '../ImageLoader';
 import MotionStatus from './MotionStatus';
+import Animation from './Animation';
 
-import PlayerUrlRight from '../../../assets/character_right.png';
-import PlayerUrlLeft from '../../../assets/character_Left.png';
-
-const PlayerImageRight = loadImage(PlayerUrlRight);
-const PlayerImageLeft = loadImage(PlayerUrlLeft);
+import playerAnimationUrl from '../../../assets/viking_rest_sprite.png';
+import playerAnimationRightUrl from '../../../assets/viking_rest_sprite_right.png';
 
 class Player {
 
@@ -16,9 +13,17 @@ class Player {
     this.pos = pos;
     this.speed = speed;
     this.prevSpeed = null;
+    this.animation = new Animation(playerAnimationUrl, {
+      numberOfFrames: 8,
+      frameRate: 5,
+    });
+    this.animationRight = new Animation(playerAnimationRightUrl, {
+      numberOfFrames: 8,
+      frameRate: 5,
+    });
   }
 
-  size = { width: 65, height: 110 };
+  size = { width: 75, height: 120 };
   hitboxSize = { width: 45, height: 77 };
 
   canJump = true;
@@ -97,25 +102,21 @@ class Player {
     const { pos, size } = this;
     const xPos = pos[0] - (size.width / 2);
     const yPos = ctx.canvas.height - pos[1] - size.height;
-    const bounds = this.getBounds();
-    ctx.beginPath();
-    ctx.strokeStyle = "green";
-    ctx.moveTo(bounds[0][0], ctx.canvas.height - bounds[0][1]);
-    ctx.lineTo(bounds[1][0], ctx.canvas.height - bounds[1][1]);
-    ctx.lineTo(bounds[2][0], ctx.canvas.height - bounds[2][1]);
-    ctx.lineTo(bounds[3][0], ctx.canvas.height - bounds[3][1]);
-    ctx.closePath();
-    ctx.stroke();
+    // const bounds = this.getBounds();
+    // ctx.beginPath();
+    // ctx.strokeStyle = "green";
+    // ctx.moveTo(bounds[0][0], ctx.canvas.height - bounds[0][1]);
+    // ctx.lineTo(bounds[1][0], ctx.canvas.height - bounds[1][1]);
+    // ctx.lineTo(bounds[2][0], ctx.canvas.height - bounds[2][1]);
+    // ctx.lineTo(bounds[3][0], ctx.canvas.height - bounds[3][1]);
+    // ctx.closePath();
+    // ctx.stroke();
 
-    ctx.beginPath();
-    ctx.drawImage(
-      this.direction > 0 ? PlayerImageRight : PlayerImageLeft,
-      xPos,
-      yPos,
-      size.width,
-      size.height,
-    );
-    ctx.closePath();
+    if (this.direction >= 1) {
+      this.animationRight.draw(ctx, xPos, yPos, this.size);
+    } else {
+      this.animation.draw(ctx, xPos, yPos, this.size);
+    }
   }
 }
 

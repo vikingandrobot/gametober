@@ -1,3 +1,6 @@
+Day 15
+- Added Animation component
+
 Day 10
 - Fixed collisions.
 
