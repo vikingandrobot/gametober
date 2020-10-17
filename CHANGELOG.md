@@ -1,3 +1,6 @@
+Day 17
+- Added dummy objects such as Gem
+
 Day 15
 - Added Animation component
 

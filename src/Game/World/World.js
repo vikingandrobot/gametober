@@ -1,7 +1,7 @@
 import * as v from '@thi.ng/vectors';
 
 const G = 0.055;
-export const everything = [];
+export let everything = [];
 
 /*
  * This will be a function to add any object to the world.
@@ -9,6 +9,19 @@ export const everything = [];
  */
 export function spawn(element) {
   everything.push(element);
+}
+
+let elementsToCollect = []
+
+export function collect(element) {
+  elementsToCollect.push(element);
+}
+
+export function cleanUp() {
+  if (elementsToCollect.length) {
+    everything = everything.filter(el1 => !elementsToCollect.find(el2 => el2 === el1));
+    elementsToCollect = [];
+  }
 }
 
 export function getBounds(pos, size) {
@@ -35,6 +48,11 @@ export function getCrossRectangleBounds(bounds1, bounds2) {
     [x2, y1],
     [x1, y1],
   ];
+}
+
+export function isColliding(bounds1, bounds2) {
+  const cr = getCrossRectangleBounds(bounds1, bounds2);
+  return cr[1][0] > cr[0][0] && cr[0][1] > cr[3][1];
 }
 
 export function gravity(element, env) {
@@ -112,7 +130,7 @@ export function move(pos, motionVector, size, getBoundsFromPos, env) {
     if (collisionTiles.length === 0) {
       break;
     } else {
-      // Filter out tiles that are already 
+      // Filter out tiles that are already
       sortedTiles = sortedTiles.filter(t1 => collisionTiles.find(t2 => (
         t1.tile[0][0] === t2[0][0] && t1.tile[0][1] === t2[0][1] &&
         t1.tile[1][0] === t2[1][0] && t1.tile[1][1] === t2[1][1] &&
