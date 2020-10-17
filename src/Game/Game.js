@@ -1,8 +1,9 @@
 import debounce from 'lodash.debounce';
 
 import Camera from './Camera/Camera';
-import { gravity } from './World/World';
+import { gravity, spawn, everything, cleanUp } from './World/World';
 import Decor from './World/Decor';
+import Gem from './World/Gem';
 import Player from './Player/Player';
 import Map from './World/Map';
 
@@ -96,6 +97,10 @@ const mountains = new Decor(
   mountainsUrl,
 );
 
+spawn(new Gem([1230, 1000]));
+spawn(new Gem([300, 250]));
+spawn(new Gem([2200, 250]));
+
 export const env = {
   camera,
   intervalId: null,
@@ -108,6 +113,7 @@ export const env = {
     deltaT: null,
   },
   map: new Map(),
+  player: player,
 };
 
 function resizeGame() {
@@ -126,6 +132,7 @@ function core(timestamp) {
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
   gravity(player, env);
   player.logic(env);
+  everything.forEach(el => el.logic(env));
 
 
   camera.setZPos(1000);
@@ -135,6 +142,7 @@ function core(timestamp) {
   camera.reset();
   camera.center(player.pos);
   env.map.draw(env);
+  everything.forEach(el => el.draw(env));
   player.draw(env);
   camera.reset();
   camera.setZPos(150);
@@ -142,6 +150,7 @@ function core(timestamp) {
   decorsFirstLayer.forEach(d => d.draw(env));
   camera.reset();
   camera.reset();
+  cleanUp();
   env.animationId = requestAnimationFrame(core);
 }
 
