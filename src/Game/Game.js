@@ -3,9 +3,10 @@ import debounce from 'lodash.debounce';
 import Camera from './Camera/Camera';
 import { gravity, spawn, everything, cleanUp } from './World/World';
 import Decor from './World/Decor';
-import Gem from './World/Gem';
+import MechanicalPiece from './World/Items/MechanicalPiece';
 import Player from './Player/Player';
 import Map from './World/Map';
+import { cleanExpiredCooldowns } from './Cooldown';
 
 import treeUrl from '../../assets/wood_first_layer.png';
 import treeUrlInverted from '../../assets/wood_first_layer_inverted.png';
@@ -97,9 +98,9 @@ const mountains = new Decor(
   mountainsUrl,
 );
 
-spawn(new Gem([1230, 1000]));
-spawn(new Gem([300, 250]));
-spawn(new Gem([2200, 250]));
+spawn(new MechanicalPiece([1230, 1000]));
+spawn(new MechanicalPiece([300, 1000]));
+spawn(new MechanicalPiece([2200, 250]));
 
 export const env = {
   camera,
@@ -131,10 +132,9 @@ function core(timestamp) {
   }
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
   gravity(player, env);
-  player.logic(env);
+  everything.forEach(el => gravity(el, env));
   everything.forEach(el => el.logic(env));
-
-
+  player.logic(env);
   camera.setZPos(1000);
   camera.center(player.pos);
   mountains.draw(env);
@@ -142,8 +142,8 @@ function core(timestamp) {
   camera.reset();
   camera.center(player.pos);
   env.map.draw(env);
-  everything.forEach(el => el.draw(env));
   player.draw(env);
+  everything.forEach(el => el.draw(env));
   camera.reset();
   camera.setZPos(150);
   camera.center(player.pos);
@@ -151,6 +151,7 @@ function core(timestamp) {
   camera.reset();
   camera.reset();
   cleanUp();
+  cleanExpiredCooldowns();
   env.animationId = requestAnimationFrame(core);
 }
 
