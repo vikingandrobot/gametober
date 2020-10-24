@@ -26,6 +26,10 @@ export default function registerKeyListeners(env) {
         controls.space = true;
         break;
 
+      case 65:
+        controls.action = true;
+        break;
+
       default:
         break;
     }
@@ -51,6 +55,10 @@ export default function registerKeyListeners(env) {
 
       case 32:
         controls.space = false;
+        break;
+
+      case 65:
+        controls.action = false;
         break;
 
       default:

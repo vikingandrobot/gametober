@@ -97,15 +97,14 @@ function computeVectorToMoveObjectOutOfTile(tile, cr) {
  * pos: Position vector of the element ot move
  * motionVector: The vector describing the movement, for example, the speed
  * size: the size of the element (width, height)
- * getBoundsFromPos: A function that returns the bounds of the element from the pos
  * env: current environment of the game
  */
-export function move(pos, motionVector, size, getBoundsFromPos, env) {
+export function move(pos, motionVector, size, env) {
   const { map } = env;
 
   let newPos = v.add2([], pos, motionVector);
 
-  let bounds = getBoundsFromPos(newPos, size);
+  let bounds = getBounds(newPos, size);
   let collisionTiles = map.getCollidingTilesBoundsFromBounds(bounds);
   let sortedTiles = collisionTiles
     .map((t) => {
@@ -124,7 +123,7 @@ export function move(pos, motionVector, size, getBoundsFromPos, env) {
     const correctionVector = computeVectorToMoveObjectOutOfTile(tile, collisionRectangle);
     newPos = v.add2([], newPos, correctionVector);
 
-    bounds = getBoundsFromPos(newPos, size);
+    bounds = getBounds(newPos, size);
     collisionTiles = map.getCollidingTilesBoundsFromBounds(bounds);
 
     if (collisionTiles.length === 0) {

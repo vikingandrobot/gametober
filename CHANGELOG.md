@@ -1,3 +1,9 @@
+Day 24
+- Added Items
+- Added MechanicalPiece
+- Added Cool down concept
+- Removed Gem
+
 Day 17
 - Added dummy objects such as Gem
 
